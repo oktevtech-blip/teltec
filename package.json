@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "@react-native-picker/picker": "^2.11.1",
+    "@react-navigation/native": "^7.1.13",
+    "@react-navigation/stack": "^7.3.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "lucide-react": "^0.523.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.14.1",
+    "nodemon": "^3.1.10",
+    "react": "^19.1.0"
+  },
+  "devDependencies": {
+    "@react-native-community/cli": "^18.0.0",
+    "@types/next": "^9.0.0",
+    "@types/react": "^19.1.8",
+    "autoprefixer": "^10.4.21",
+    "next": "^15.3.3",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.10"
+  }
+}
