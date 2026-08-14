@@ -406,7 +406,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
 }
 
 // API Configuration
-const API_BASE_URL = 'http://localhost:8081';
+const API_BASE_URL = 'https://teltec.onrender.com';
 
 // API Service Functions
 export const clientAPI = {
