@@ -411,6 +411,8 @@ const transactionRoutes = require("./routes/transactionRoutes");
 const authRoutes = require("./routes/authRoutes");
 const dataRoutes = require("./routes/dataRoutes");
 
+const db = require("./config/db");
+
 const {
   notFound,
   errorHandler,
@@ -418,15 +420,15 @@ const {
 
 const app = express();
 
-
 // --------------------------------------------------
 // MIDDLEWARE
 // --------------------------------------------------
 
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
+app.use(express.json());
+
+app.use(express.urlencoded({ extended: true }));
 
 // --------------------------------------------------
 // BASIC ROUTE
@@ -434,10 +436,10 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.json({
+    success: true,
     message: "TELTEC Backend server is running",
   });
 });
-
 
 // --------------------------------------------------
 // ROUTES
@@ -455,7 +457,6 @@ app.use("/", authRoutes);
 
 app.use("/data", dataRoutes);
 
-
 // --------------------------------------------------
 // ERROR HANDLING
 // --------------------------------------------------
@@ -464,28 +465,38 @@ app.use(notFound);
 
 app.use(errorHandler);
 
-
 // --------------------------------------------------
 // START SERVER
 // --------------------------------------------------
 
 const PORT = process.env.PORT || 8081;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
 
 // --------------------------------------------------
 // GRACEFUL SHUTDOWN
 // --------------------------------------------------
 
-const db = require("./config/db");
+const shutdown = (signal) => {
+  console.log(`${signal} received. Shutting down server...`);
 
-process.on("SIGINT", () => {
-  console.log("Shutting down server...");
+  server.close(() => {
+    console.log("HTTP server closed.");
 
-  db.end(() => {
-    process.exit(0);
+    db.end((err) => {
+      if (err) {
+        console.error("Error closing database pool:", err.message);
+        process.exit(1);
+      }
+
+      console.log("Database connection pool closed.");
+      process.exit(0);
+    });
   });
-});
+};
+
+process.on("SIGINT", () => shutdown("SIGINT"));
+
+process.on("SIGTERM", () => shutdown("SIGTERM"));

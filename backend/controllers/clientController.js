@@ -1,11 +1,17 @@
 const db = require("../config/db");
 const sendDbError = require("../utils/dbError");
 
+// --------------------------------------------------
+// GET ALL CLIENTS
+// --------------------------------------------------
+
 exports.getClients = (req, res) => {
   const sql = "SELECT * FROM clients ORDER BY id DESC";
 
   db.query(sql, (err, rows) => {
-    if (err) return sendDbError(res, "Error fetching clients:", err);
+    if (err) {
+      return sendDbError(res, "Error fetching clients:", err);
+    }
 
     res.json({
       success: true,
@@ -15,11 +21,17 @@ exports.getClients = (req, res) => {
   });
 };
 
+// --------------------------------------------------
+// GET SINGLE CLIENT
+// --------------------------------------------------
+
 exports.getClient = (req, res) => {
   const sql = "SELECT * FROM clients WHERE id = ?";
 
   db.query(sql, [req.params.id], (err, rows) => {
-    if (err) return sendDbError(res, "Error fetching client:", err);
+    if (err) {
+      return sendDbError(res, "Error fetching client:", err);
+    }
 
     if (!rows.length) {
       return res.status(404).json({
@@ -35,6 +47,10 @@ exports.getClient = (req, res) => {
   });
 };
 
+// --------------------------------------------------
+// CREATE CLIENT
+// --------------------------------------------------
+
 exports.createClient = (req, res) => {
   const {
     name,
@@ -47,10 +63,22 @@ exports.createClient = (req, res) => {
 
   const errors = [];
 
-  if (!name || !name.trim()) errors.push("Name is required");
-  if (!email || !email.trim()) errors.push("Email is required");
-  if (!phone || !phone.trim()) errors.push("Phone is required");
-  if (!address || !address.trim()) errors.push("Address is required");
+  if (!name || !name.trim()) {
+    errors.push("Name is required");
+  }
+
+  if (!email || !email.trim()) {
+    errors.push("Email is required");
+  }
+
+  if (!phone || !phone.trim()) {
+    errors.push("Phone is required");
+  }
+
+  if (!address || !address.trim()) {
+    errors.push("Address is required");
+  }
+
   if (!company_type || !company_type.trim()) {
     errors.push("Company type is required");
   }
@@ -65,6 +93,7 @@ exports.createClient = (req, res) => {
 
   const cleanEmail = email.trim().toLowerCase();
 
+  // Check if email already exists
   db.query(
     "SELECT id FROM clients WHERE email = ?",
     [cleanEmail],
@@ -86,7 +115,15 @@ exports.createClient = (req, res) => {
 
       const sql = `
         INSERT INTO clients
-        (name, email, phone, address, company_type, status, registration_date)
+        (
+          name,
+          email,
+          phone,
+          address,
+          company_type,
+          status,
+          registration_date
+        )
         VALUES (?, ?, ?, ?, ?, ?, NOW())
       `;
 
@@ -126,6 +163,10 @@ exports.createClient = (req, res) => {
   );
 };
 
+// --------------------------------------------------
+// UPDATE CLIENT
+// --------------------------------------------------
+
 exports.updateClient = (req, res) => {
   const clientId = req.params.id;
 
@@ -140,14 +181,22 @@ exports.updateClient = (req, res) => {
 
   const errors = [];
 
-  if (!name || !name.trim()) errors.push("Name is required");
-  if (!email || !email.trim()) errors.push("Email is required");
+  if (!name || !name.trim()) {
+    errors.push("Name is required");
+  }
+
+  if (!email || !email.trim()) {
+    errors.push("Email is required");
+  }
+
   if (!phone || !phone.trim()) {
     errors.push("Phone number is required");
   }
+
   if (!address || !address.trim()) {
     errors.push("Address is required");
   }
+
   if (!company_type || !company_type.trim()) {
     errors.push("Company type is required");
   }
@@ -162,6 +211,7 @@ exports.updateClient = (req, res) => {
 
   const cleanEmail = email.trim().toLowerCase();
 
+  // Check if another client already uses the email
   db.query(
     "SELECT id FROM clients WHERE email = ? AND id != ?",
     [cleanEmail, clientId],
@@ -229,6 +279,10 @@ exports.updateClient = (req, res) => {
   );
 };
 
+// --------------------------------------------------
+// DELETE CLIENT
+// --------------------------------------------------
+
 exports.deleteClient = (req, res) => {
   db.query(
     "DELETE FROM clients WHERE id = ?",
@@ -257,6 +311,10 @@ exports.deleteClient = (req, res) => {
   );
 };
 
+// --------------------------------------------------
+// BATCH CREATE CLIENTS
+// --------------------------------------------------
+
 exports.batchCreateClients = (req, res) => {
   const clients = req.body.clients;
 
@@ -269,7 +327,15 @@ exports.batchCreateClients = (req, res) => {
 
   const sql = `
     INSERT INTO clients
-    (name, email, phone, address, company_type, status, registration_date)
+    (
+      name,
+      email,
+      phone,
+      address,
+      company_type,
+      status,
+      registration_date
+    )
     VALUES ?
   `;
 
