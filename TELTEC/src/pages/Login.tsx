@@ -36,7 +36,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   setError("");
 
   try {
-    const response = await fetch("http://localhost:8081/login", {
+    const response = await fetch("https://teltec.onrender.com/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password })
