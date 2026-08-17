@@ -132,7 +132,7 @@ export function Login({ onLogin }: LoginProps) {
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-blue-800">
-            Teltec Investments Ltd
+            Oktev Investments Ltd
           </h1>
           <p className="text-gray-600 mt-2">Management System</p>
         </div>

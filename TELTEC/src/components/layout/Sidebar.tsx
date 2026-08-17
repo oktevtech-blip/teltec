@@ -45,7 +45,7 @@ export function Sidebar({ isOpen, currentPage = "dashboard", onNavigate }: Sideb
       } fixed inset-y-0 left-0 transform bg-blue-800 text-white w-64 transition duration-200 ease-in-out z-20 md:relative md:translate-x-0`}
     >
       <div className="p-6">
-        <h1 className="text-2xl font-bold">Teltec</h1>
+        <h1 className="text-2xl font-bold">Oktev</h1>
         <p className="text-blue-200 text-sm">Management System</p>
       </div>
       <nav className="px-2 pt-2 pb-4">
