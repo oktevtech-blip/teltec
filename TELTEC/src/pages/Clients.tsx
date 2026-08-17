@@ -17,6 +17,8 @@ import {
 } from 'lucide-react';
 import { ClientForm } from '../Forms/ClientForm';
 
+const API_BASE_URL = 'https://teltec.onrender.com';
+
 export function Clients() {
   const { state, dispatch } = useAppContext();
   const [showForm, setShowForm] = useState(false);
@@ -36,7 +38,7 @@ export function Clients() {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch('/api/clients');
+      const response = await fetch(`${API_BASE_URL}/clients`);;
       if (!response.ok) {
         throw new Error(`Failed to load clients: ${response.statusText}`);
       }
@@ -72,7 +74,7 @@ export function Clients() {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch(`/api/clients/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/clients/${id}`, {
         method: 'DELETE',
       });
 
